@@ -112,6 +112,19 @@ function App() {
       }).catch((error) => console.log(`Ошибка ${error}`));
   }
   
+  const onRegister = (email, password) => {
+    auth.register(email, password).then(() => {
+      navigate('/signin', { replace: true });
+      setStateInfoPopup(true);
+    })
+    .catch((error) => {console.log(`Ошибка ${error}`);
+    setStateInfoPopup(false);
+    })
+    .finally(() => {
+      setInfoPopupOpen(true);
+    })
+  };
+
   const handleTokenCheck = useCallback(() => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -146,19 +159,6 @@ function App() {
     navigate('/signin', { replace: true });
     console.log("ghbdtn");
   }
-
-  const onRegister = (email, password) => {
-    auth.register(email, password).then(() => {
-      navigate('/signin', { replace: true });
-      setStateInfoPopup(true);
-    })
-    .catch((error) => {console.log(`Ошибка ${error}`);
-    setStateInfoPopup(false);
-    })
-    .finally(() => {
-      setInfoPopupOpen(true);
-    })
-  };
 
   return (
     <>
@@ -196,7 +196,7 @@ function App() {
         />
 
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
-        {/* <InfoTooltip isOpen={isInfoPopupOpen} onClose={closeAllPopups} state={stateInfoPopup} /> */}
+        <InfoTooltip isOpen={isInfoPopupOpen} onClose={closeAllPopups} state={stateInfoPopup} />
 
       </CurrentUserContext.Provider>
     </>
