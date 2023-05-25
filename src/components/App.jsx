@@ -139,11 +139,12 @@ function App() {
     }).catch((error) => console.log(`Ошибка ${error}`));
   }
 
-  const signOut = () => {
+  const onSignOut = () => {
     localStorage.removeItem('token');
     setUserData('');
     setLoggedIn(false);
     navigate('/signin', { replace: true });
+    console.log("ghbdtn");
   }
 
   const onRegister = (email, password) => {
@@ -163,7 +164,7 @@ function App() {
     <>
       <CurrentUserContext.Provider value={currentUser}>
 
-        <Header email={userData} signOut={signOut} />
+        <Header email={userData} onSignOut={onSignOut} />
 
         <Routes>
           <Route path="signup" element={<Register onRegister={onRegister} />} />
