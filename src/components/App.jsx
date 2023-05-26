@@ -44,8 +44,26 @@ function App() {
   }, [loggedIn]);
 
   useEffect(() => {
-    handleTokenCheck();
-  }, [loggedIn])
+    const token = localStorage.getItem('token');
+    if (token) {
+      auth.checkToken(token).then((res) => {
+        setLoggedIn(true);
+        setUserEmail(res.data.email);
+        navigate('/');
+      }).catch((error) => console.log(`Ошибка ${error}`));
+    }
+  }, [navigate])
+
+  const onLogin = (email, password) => {
+    auth.authorize(email, password).then((data) => {
+      if (data.token) {
+        localStorage.setItem('token', data.token);
+        setLoggedIn(true);
+        setUserEmail(email);
+        navigate('/');        
+      }
+    }).catch((error) => console.log(`Ошибка ${error}`));
+  }
    
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
@@ -125,30 +143,6 @@ function App() {
       setInfoTooltipPopupOpen(true);
     })
   };
-
-  const handleTokenCheck = () => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      auth.checkToken(token).then((res) => {
-        if (res) {
-          setLoggedIn(true);
-          setUserEmail(res.data.email);
-          navigate('/');
-        }
-      }).catch((error) => console.log(`Ошибка ${error}`));
-    }    
-  }
-
-  const onLogin = (email, password) => {
-    auth.authorize(email, password).then((data) => {
-      if (data.token) {
-        handleTokenCheck();
-        setLoggedIn(true);
-        navigate('/');
-        // localStorage.setItem('token', data.token);
-      }
-    }).catch((error) => console.log(`Ошибка ${error}`));
-  }
 
   const onSignOut = () => {
     localStorage.removeItem('token');
