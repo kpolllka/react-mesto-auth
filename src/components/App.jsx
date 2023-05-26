@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
@@ -9,14 +9,12 @@ import { CurrentUserContext } from './contexts/CurrentUserContext';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
-import { Route, Routes, Navigate, useNavigate } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import Register from './Register';
 import Login from './Login';
 import ProtectedRouteElement from './ProtectedRoute';
 import InfoTooltip from './InfoTooltip';
 import * as auth from '../utils/auth';
-
-
 
 function App() {
 
@@ -27,10 +25,10 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
 
-  const [isInfoPopupOpen, setInfoPopupOpen] = useState(false);
-  const [stateInfoPopup, setStateInfoPopup] = useState(false);
+  const [isInfoTooltipPopupOpen, setInfoTooltipPopupOpen] = useState(false);
+  const [stateInfoTooltip, setStateInfoTooltip] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
-  const [userData, setUserData] = useState('');
+  const [userEmail, setUserEmail] = useState('');
   
   const navigate = useNavigate();
 
@@ -45,6 +43,9 @@ function App() {
     }
   }, [loggedIn]);
 
+  useEffect(() => {
+    handleTokenCheck();
+  }, [loggedIn])
    
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
@@ -67,7 +68,7 @@ function App() {
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
-    setInfoPopupOpen(false);
+    setInfoTooltipPopupOpen(false);
     setSelectedCard({});
   }
 
@@ -114,33 +115,29 @@ function App() {
   
   const onRegister = (email, password) => {
     auth.register(email, password).then(() => {
-      navigate('/signin', { replace: true });
-      setStateInfoPopup(true);
+      navigate('/signin');
+      setStateInfoTooltip(true);
     })
     .catch((error) => {console.log(`Ошибка ${error}`);
-    setStateInfoPopup(false);
+    setStateInfoTooltip(false);
     })
     .finally(() => {
-      setInfoPopupOpen(true);
+      setInfoTooltipPopupOpen(true);
     })
   };
 
-  const handleTokenCheck = useCallback(() => {
+  const handleTokenCheck = () => {
     const token = localStorage.getItem('token');
     if (token) {
       auth.checkToken(token).then((res) => {
         if (res) {
           setLoggedIn(true);
-          setUserData(res.data.email);
+          setUserEmail(res.data.email);
           navigate('/');
         }
       }).catch((error) => console.log(`Ошибка ${error}`));
     }    
-  })
-
-  useEffect(() => {
-    handleTokenCheck();
-  }, [handleTokenCheck])
+  }
 
   const onLogin = (email, password) => {
     auth.authorize(email, password).then((data) => {
@@ -148,23 +145,23 @@ function App() {
         handleTokenCheck();
         setLoggedIn(true);
         navigate('/');
+        // localStorage.setItem('token', data.token);
       }
     }).catch((error) => console.log(`Ошибка ${error}`));
   }
 
   const onSignOut = () => {
     localStorage.removeItem('token');
-    setUserData('');
+    setUserEmail('');
     setLoggedIn(false);
     navigate('/signin');
-    console.log('ghbdtn');
   }
 
   return (
     <>
       <CurrentUserContext.Provider value={currentUser}>
 
-        <Header email={userData} onSignOut={onSignOut} />
+        <Header email={userEmail} onSignOut={onSignOut} />
 
         <Routes>
           <Route path='signup' element={<Register onRegister={onRegister} />} />
@@ -196,7 +193,8 @@ function App() {
         />
 
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
-        <InfoTooltip isOpen={isInfoPopupOpen} onClose={closeAllPopups} state={stateInfoPopup} />
+
+        <InfoTooltip isOpen={isInfoTooltipPopupOpen} onClose={closeAllPopups} state={stateInfoTooltip} />
 
       </CurrentUserContext.Provider>
     </>
