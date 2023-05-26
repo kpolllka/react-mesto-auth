@@ -1,15 +1,15 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from 'react';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
 import PopupWithForm from './PopupWithForm';
-import ImagePopup from "./ImagePopup";
-import api from "../utils/Api";
-import { CurrentUserContext } from "./contexts/CurrentUserContext";
+import ImagePopup from './ImagePopup';
+import api from '../utils/Api';
+import { CurrentUserContext } from './contexts/CurrentUserContext';
 import EditProfilePopup from './EditProfilePopup';
-import EditAvatarPopup from "./EditAvatarPopup";
-import AddPlacePopup from "./AddPlacePopup";
-import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
+import EditAvatarPopup from './EditAvatarPopup';
+import AddPlacePopup from './AddPlacePopup';
+import { Route, Routes, Navigate, useNavigate } from 'react-router-dom';
 import Register from './Register';
 import Login from './Login';
 import ProtectedRouteElement from './ProtectedRoute';
@@ -30,7 +30,7 @@ function App() {
   const [isInfoPopupOpen, setInfoPopupOpen] = useState(false);
   const [stateInfoPopup, setStateInfoPopup] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
-  const [userData, setUserData] = useState("");
+  const [userData, setUserData] = useState('');
   
   const navigate = useNavigate();
 
@@ -132,7 +132,7 @@ function App() {
         if (res) {
           setLoggedIn(true);
           setUserData(res.data.email);
-          navigate("/", { replace: true });
+          navigate('/');
         }
       }).catch((error) => console.log(`Ошибка ${error}`));
     }    
@@ -147,7 +147,7 @@ function App() {
       if (data.token) {
         handleTokenCheck();
         setLoggedIn(true);
-        navigate('/', { replace: true });
+        navigate('/');
       }
     }).catch((error) => console.log(`Ошибка ${error}`));
   }
@@ -156,8 +156,8 @@ function App() {
     localStorage.removeItem('token');
     setUserData('');
     setLoggedIn(false);
-    navigate('/signin', { replace: true });
-    console.log("ghbdtn");
+    navigate('/signin');
+    console.log('ghbdtn');
   }
 
   return (
@@ -167,8 +167,8 @@ function App() {
         <Header email={userData} onSignOut={onSignOut} />
 
         <Routes>
-          <Route path="signup" element={<Register onRegister={onRegister} />} />
-          <Route path="/signin" element={<Login onLogin={onLogin} />} />
+          <Route path='signup' element={<Register onRegister={onRegister} />} />
+          <Route path='/signin' element={<Login onLogin={onLogin} />} />
           <Route path='/' element={<ProtectedRouteElement
             element={Main}
             loggedIn={loggedIn}
@@ -189,10 +189,10 @@ function App() {
         <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} />
         
         <PopupWithForm
-          title="Вы уверены?"
-          name="popup-delete-cards"
+          title='Вы уверены?'
+          name='popup-delete-cards'
           onClose={closeAllPopups}
-          textButton="Да"
+          textButton='Да'
         />
 
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />

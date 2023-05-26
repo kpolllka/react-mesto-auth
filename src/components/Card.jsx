@@ -1,5 +1,5 @@
-import { useContext } from "react";
-import { CurrentUserContext } from "./contexts/CurrentUserContext";
+import { useContext } from 'react';
+import { CurrentUserContext } from './contexts/CurrentUserContext';
 
 function Card({ card, onCardClick, onCardDelete, onCardLike }) {
 
@@ -24,16 +24,16 @@ function Card({ card, onCardClick, onCardDelete, onCardLike }) {
   };
  
   return (
-    <article className="element">
-      <div className="element__image">
-        <img className="element__mask-group" src={card.link} alt={card.name} onClick={handleCardClick}/>
-        {isOwn && <button className="element__trash" onClick={handleDeleteClick} type="button"></button>}
+    <article className='element'>
+      <div className='element__image'>
+        <img className='element__mask-group' src={card.link} alt={card.name} onClick={handleCardClick}/>
+        {isOwn && <button className='element__trash' onClick={handleDeleteClick} type='button'></button>}
       </div>
-      <div className="element__group">
-        <h2 className="element__group-title">{card.name}</h2>
-        <div className="element__group-like">
-          <button className={cardLikeButtonClassName} onClick={handleLikeClick} type="button"></button>
-          <p className="element__like-counter">{card.likes.length}</p>
+      <div className='element__group'>
+        <h2 className='element__group-title'>{card.name}</h2>
+        <div className='element__group-like'>
+          <button className={cardLikeButtonClassName} onClick={handleLikeClick} type='button'></button>
+          <p className='element__like-counter'>{card.likes.length}</p>
         </div>
       </div>
     </article>

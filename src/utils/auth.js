@@ -9,9 +9,9 @@ const checkResponse = (res) => {
 
 export const register = (email, password) => {
   return fetch(`${url}/signup`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json"
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({ email, password })
   })
@@ -20,9 +20,9 @@ export const register = (email, password) => {
 
 export const authorize = (email, password) => {
   return fetch(`${url}/signin`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json"
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({ email, password }),
   })
@@ -37,10 +37,10 @@ export const authorize = (email, password) => {
 
 export const checkToken = (jwt) => {
   return fetch(`${url}/users/me`, {
-    method: "GET",
+    method: 'GET',
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${jwt}`
     }
   })
