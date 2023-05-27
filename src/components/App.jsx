@@ -52,7 +52,8 @@ function App() {
         navigate('/');
       }).catch((error) => console.log(`Ошибка ${error}`));
     }
-  }, [navigate])
+  // }, [navigate])
+  }, [])
    
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
